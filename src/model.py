@@ -44,8 +44,6 @@ class CNN(nn.Module):
         return x
 
 
-
-
 class trainargs():
     batch_size = 4
     learning_rate = 1e-3
