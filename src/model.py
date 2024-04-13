@@ -1,7 +1,7 @@
 import torch as t
 import torch.optim
 import torch.nn as nn
-from optimizers import Sgd
+from src.optimizers import Sgd
 
 
 
