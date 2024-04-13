@@ -7,11 +7,12 @@ import torch.nn as nn
 class Sgd(torch.optim.Optimizer):
     def __init__(self, params, lr):
         self.lr = lr
-        defaults= dict(lr = lr)
+        defaults= dict(lr = lr, params = params)
         super(Sgd, self).__init__(params, defaults)
 
-    def step():
-        x = 1
+    def step(self):
+        for p in self.params:
+            print(p)
 
 class SgdMomentum(torch.optim.Optimizer):
     def __init__(self,params, lr):
