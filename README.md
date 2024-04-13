@@ -1,5 +1,5 @@
 CPSC 440 Project 2024
-
+riu sugimoto
 notes - 
 
 1. can we cross check our optimizer with pytorch
