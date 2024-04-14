@@ -4,13 +4,13 @@ import torch.nn as nn
 
 
 
-class Sgd(torch.optim.Optimizer):
+class SGD(torch.optim.Optimizer):
     def __init__(self, params, lr):
         self.lr = lr
         params = list(params) #generator
         self.params = params
         defaults= dict(lr = lr, params = self.params)
-        super(Sgd, self).__init__(params, defaults)
+        super(SGD, self).__init__(params, defaults)
 
     @t.inference_mode()
     def step(self):
@@ -19,13 +19,13 @@ class Sgd(torch.optim.Optimizer):
             self.params[i] -= self.lr*grad
 
 
-class SgdMomentum(torch.optim.Optimizer):
+class SGDMomentum(torch.optim.Optimizer):
     def __init__(self, params, lr):
         self.lr = lr
         params = list(params) #generator
         self.params = params
         defaults= dict(lr = lr, params = self.params)
-        super(SgdMomentum, self).__init__(params, defaults)
+        super(SGDMomentum, self).__init__(params, defaults)
 
     @t.inference_mode()
     def step(self):

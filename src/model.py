@@ -1,7 +1,7 @@
 import torch as t
 import torch.optim
 import torch.nn as nn
-from optimizers import Sgd
+from optimizers import SGD
 from torchvision import datasets, transforms, models
 from torch.utils.data import DataLoader, Subset
 from tqdm.notebook import tqdm
@@ -58,7 +58,7 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
         train, test = get_mnist(args.subset)
         trainloader =DataLoader(train, batch_size=args.batch_size, shuffle=True)
         testloader = DataLoader(test, batch_size= args.batch_size, shuffle=False)
-    accuracy_list = []
+    
 
     if optimizer_type == 'Adam':
         optimizer = t.optim.Adam(model.parameters(), lr=args.learning_rate)
@@ -71,8 +71,7 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
     # elif optimizer_type == 'Momentum':
     #     optimizer = Sgd(model.parameters(), lr=args.learning_rate)
    
-    # optimizer = t.optim.Adam(model.parameters(), lr = args.learning_rate) # change this line
-
+    accuracy_list = []
     loss = nn.CrossEntropyLoss()
     loss_list = []
     n = 0
@@ -110,9 +109,9 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
     print(accuracy_list)
 
 
-# writer = SummaryWriter("10 epoch test, 64 bs, rmsprop")
+# writer = SummaryWriter("n/a")
 # args = trainargs()
-# train(args, CNN(), optimizer_type="RMSProp")
+# train(args, CNN(), optimizer_type="SGD")
 # writer.close()
 
 
