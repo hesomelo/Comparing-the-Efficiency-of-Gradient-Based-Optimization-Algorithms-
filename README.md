@@ -10,3 +10,9 @@ notes -
 3. how many models and parameters should we try
 4. how many runs should we do per trial
 5. get tensorboard working
+
+
+git pull origin main  before write the code
+
+add and then push 
+git push origin main
