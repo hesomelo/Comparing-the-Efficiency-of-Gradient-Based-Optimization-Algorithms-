@@ -110,9 +110,9 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
     print(accuracy_list)
 
 
-writer = SummaryWriter("10 epoch test, 64 bs, rmsprop")
-args = trainargs()
-train(args, CNN(), optimizer_type="RMSProp")
-writer.close()
+# writer = SummaryWriter("10 epoch test, 64 bs, rmsprop")
+# args = trainargs()
+# train(args, CNN(), optimizer_type="RMSProp")
+# writer.close()
 
 
