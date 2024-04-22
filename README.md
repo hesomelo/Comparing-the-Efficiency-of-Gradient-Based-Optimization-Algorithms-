@@ -14,5 +14,5 @@ notes -
 
 git pull origin main  before write the code
 
-add and then push 
+add and then push (write a message too)
 git push origin main
