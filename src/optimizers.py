@@ -3,10 +3,8 @@ import torch.optim
 import torch.nn as nn
 
 
-<<<<<<< HEAD
 
 
-=======
 # class Sgd(torch.optim.Optimizer):
     # def __init__(self, params, lr):
     #     self.lr = lr
@@ -15,7 +13,7 @@ import torch.nn as nn
 
 # this includes not only momentum but also other features such as dampening, 
 #weight decay, Nesterov's momentum, and support for maximization and these are the parameters we can set as default
-class Sgd(torch.optim.Optimizer):
+class SGD(torch.optim.Optimizer):
     def __init__(self, params, lr, momentum=0, dampening=0, weight_decay=0, nesterov=False, maximize=False):
         if lr < 0.0:
             raise ValueError("Invalid learning rate: {}".format(lr))
@@ -27,7 +25,7 @@ class Sgd(torch.optim.Optimizer):
             raise ValueError("Invalid dampening value: {}".format(dampening))
         
         defaults = dict(lr=lr, momentum=momentum, dampening=dampening, weight_decay=weight_decay, nesterov=nesterov, maximize=maximize)
-        super(Sgd, self).__init__(params, defaults)
+        super(SGD, self).__init__(params, defaults)
 
         @t.inference_mode()
         def step(self, closure=None):
@@ -102,7 +100,6 @@ class SgdMomentum(torch.optim.Optimizer):
 
         return loss
 
->>>>>>> 16889452ed75fb765101dcaceaf68f5b54ab24bd
 
 class Adam(torch.optim.Optimizer):
     def __init__(self, params, lr=0.001, b1=0.9, b2=0.999, ep=10e-8):
@@ -127,7 +124,7 @@ class Adam(torch.optim.Optimizer):
             self.v[i] = self.b2*self.v[i] + (1-self.b2)*(grad**2)
             m_hat = self.m[i]/(1-self.b1**self.t)
             v_hat = self.v[i]/(1-self.b2**self.t)
-            self.params[i] -= self.lr*grad*m_hat/(t.sqrt(v_hat)+self.ep)
+            self.params[i] -= self.lr*m_hat/(t.sqrt(v_hat)+self.ep)
 
 class RMSProp(torch.optim.Optimizer):
     def __init__(self, params, lr=0.01, alpha=0.99, ep=1e-8):
@@ -149,10 +146,6 @@ class RMSProp(torch.optim.Optimizer):
 
 
 class AdaGrad(torch.optim.Optimizer):
-<<<<<<< HEAD
-    def __init__(self,params, lr): 
-        defaults = dict(lr = lr)
-=======
     def __init__(self, params, lr=0.01, ep=1e-8):
         params = list(params) #generator
         self.params = params
@@ -160,7 +153,6 @@ class AdaGrad(torch.optim.Optimizer):
         self.ep = ep
         self.st = [t.zeros_like(p) for p in self.params] #state sum
         defaults= dict(params = self.params, lr = lr, ep = ep)
->>>>>>> 16889452ed75fb765101dcaceaf68f5b54ab24bd
         super(AdaGrad, self).__init__(params, defaults)
 
     @t.inference_mode()

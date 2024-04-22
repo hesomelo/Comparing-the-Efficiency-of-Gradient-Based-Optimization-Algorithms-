@@ -111,7 +111,7 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
 
 writer = SummaryWriter("n/a")
 args = trainargs()
-train(args, CNN(), optimizer_type="Adagrad")
+train(args, CNN(), optimizer_type="Adam")
 writer.close()
 
 
