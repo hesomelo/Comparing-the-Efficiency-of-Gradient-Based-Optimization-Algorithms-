@@ -33,7 +33,7 @@ class SGDMomentum(torch.optim.Optimizer):
             self.params[i] -= self.lr*grad
 
 class Adam(torch.optim.Optimizer):
-    def __init__(self, params, lr, b1=0.9, b2=0.999, ep=10e-8):
+    def __init__(self, params, lr=0.001, b1=0.9, b2=0.999, ep=10e-8):
         params = list(params) #generator
         self.params = params
         self.t = 0

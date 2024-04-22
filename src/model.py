@@ -61,7 +61,7 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
     
 
     if optimizer_type == 'Adam':
-        optimizer = Adam(model.parameters(), lr=args.learning_rate)
+        optimizer = Adam(model.parameters())
     elif optimizer_type == 'SGD':
         optimizer = SGD(model.parameters(), lr=args.learning_rate)
     elif optimizer_type == 'RMSProp':
