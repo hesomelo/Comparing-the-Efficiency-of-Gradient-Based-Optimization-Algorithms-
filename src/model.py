@@ -1,12 +1,13 @@
 import torch as t
 import torch.optim
 import torch.nn as nn
-from optimizers import Sgd
+from optimizers import SGD, Adam, AdaGrad, RMSProp
 from torchvision import datasets, transforms, models
 from torch.utils.data import DataLoader, Subset
 from tqdm.notebook import tqdm
 import torch.nn.functional as F
 from utils import get_mnist
+from torch.utils.tensorboard import SummaryWriter
 
 
 
@@ -22,7 +23,7 @@ MLP = nn.Sequential(
     nn.Linear(hid,hid),
     nn.ReLU(),
     nn.Linear(hid,out),
-    # nn.Sigmoid()
+
 )
 
 
@@ -45,10 +46,10 @@ class CNN(nn.Module):
 
 
 class trainargs():
-    batch_size = 4
+    batch_size = 64
     learning_rate = 1e-3
-    subset = 20
-    epochs = 1
+    subset = 50
+    epochs = 10
 
 def train(args, model, optimizer_type="Adam", dataset="mnist"):
     model.to(device)
@@ -57,25 +58,24 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
         train, test = get_mnist(args.subset)
         trainloader =DataLoader(train, batch_size=args.batch_size, shuffle=True)
         testloader = DataLoader(test, batch_size= args.batch_size, shuffle=False)
-    accuracy_list = []
+    
 
     if optimizer_type == 'Adam':
-        optimizer = t.optim.Adam(model.parameters(), lr=args.learning_rate)
+        optimizer = Adam(model.parameters(), lr=args.learning_rate)
     elif optimizer_type == 'SGD':
-        optimizer = Sgd(model.parameters(), lr=args.learning_rate)
-    # elif optimizer_type == 'RmsProp':
-    #     optimizer = Sgd(model.parameters(), lr=args.learning_rate)
-    # elif optimizer_type == 'Adagrad':
-    #     optimizer = Sgd(model.parameters(), lr=args.learning_rate)
+        optimizer = SGD(model.parameters(), lr=args.learning_rate)
+    elif optimizer_type == 'RMSProp':
+        optimizer = RMSProp(model.parameters(), lr=args.learning_rate)
+    elif optimizer_type == 'Adagrad':
+         optimizer = AdaGrad(model.parameters(), lr=args.learning_rate)
     # elif optimizer_type == 'Momentum':
     #     optimizer = Sgd(model.parameters(), lr=args.learning_rate)
    
-    # Add more optimizers as needed
-    optimizer = t.optim.Adam(model.parameters(), lr = args.learning_rate) # change this line
-
+    accuracy_list = []
     loss = nn.CrossEntropyLoss()
     loss_list = []
-    for args.epochs in tqdm(range(args.epochs)):
+    n = 0
+    for epoch in tqdm(range(args.epochs)):
         for imgs, labels in trainloader:
             # print(imgs.shape)
             optimizer.zero_grad()
@@ -86,6 +86,9 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
             loss_n.backward()
             optimizer.step()
             loss_list.append(loss_n.item())
+           
+        writer.add_scalar("Loss/train", loss_n.item(), epoch)
+        
         
         num_correct_classifications = 0
 
@@ -100,13 +103,15 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
   
         accuracy = num_correct_classifications / len(test)
         accuracy_list.append(accuracy)   
+        writer.add_scalar("accuracy/valid", accuracy, epoch)
 
    
     print(accuracy_list)
 
 
-
+writer = SummaryWriter("n/a")
 args = trainargs()
-train(args, CNN())
+train(args, CNN(), optimizer_type="Adagrad")
+writer.close()
 
 
