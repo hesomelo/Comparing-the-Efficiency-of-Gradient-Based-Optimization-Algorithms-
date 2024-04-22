@@ -5,6 +5,8 @@ import torch.nn as nn
 
 <<<<<<< HEAD
 
+
+=======
 # class Sgd(torch.optim.Optimizer):
     # def __init__(self, params, lr):
     #     self.lr = lr
@@ -27,7 +29,7 @@ class Sgd(torch.optim.Optimizer):
         defaults = dict(lr=lr, momentum=momentum, dampening=dampening, weight_decay=weight_decay, nesterov=nesterov, maximize=maximize)
         super(Sgd, self).__init__(params, defaults)
 
-
+        @t.inference_mode()
         def step(self, closure=None):
             loss = None
             if closure is not None:
@@ -72,7 +74,8 @@ class SgdMomentum(torch.optim.Optimizer):
 
         defaults = dict(lr=lr, momentum=momentum)
         super(SgdMomentum, self).__init__(params, defaults)
-
+    
+    @t.inference_mode()
     def step(self, closure=None):
         loss = None
         if closure is not None:
@@ -99,39 +102,6 @@ class SgdMomentum(torch.optim.Optimizer):
 
         return loss
 
-
-
-
-
-=======
-class SGD(torch.optim.Optimizer):
-    def __init__(self, params, lr):
-        self.lr = lr
-        params = list(params) #generator
-        self.params = params
-        defaults= dict(lr = lr, params = self.params)
-        super(SGD, self).__init__(params, defaults)
-
-    @t.inference_mode()
-    def step(self):
-        for i,p in enumerate(self.params):
-            grad = p.grad
-            self.params[i] -= self.lr*grad
-
-
-class SGDMomentum(torch.optim.Optimizer):
-    def __init__(self, params, lr):
-        self.lr = lr
-        params = list(params) #generator
-        self.params = params
-        defaults= dict(lr = lr, params = self.params)
-        super(SGDMomentum, self).__init__(params, defaults)
-
-    @t.inference_mode()
-    def step(self):
-        for i,p in enumerate(self.params):
-            grad = p.grad
-            self.params[i] -= self.lr*grad
 >>>>>>> 16889452ed75fb765101dcaceaf68f5b54ab24bd
 
 class Adam(torch.optim.Optimizer):
