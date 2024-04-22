@@ -59,7 +59,8 @@ class Sgd(torch.optim.Optimizer):
             
             return loss     
 
-import torch
+
+
 
 class SgdMomentum(torch.optim.Optimizer):
     def __init__(self, params, lr, momentum=0.9):
@@ -115,6 +116,7 @@ class RmsProp(torch.optim.Optimizer):
         super(RmsProp, self).__init__(params, defaults)
     def step():
         x = 1
+
 
 class AdaGrad(torch.optim.Optimizer):
     def __init__(self,params, lr): 
