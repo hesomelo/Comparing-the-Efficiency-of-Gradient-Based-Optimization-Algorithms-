@@ -1,7 +1,7 @@
 import torch as t
 import torch.optim
 import torch.nn as nn
-from optimizers import SGD
+from optimizers import SGD, Adam, AdaGrad, RMSProp
 from torchvision import datasets, transforms, models
 from torch.utils.data import DataLoader, Subset
 from tqdm.notebook import tqdm
@@ -61,13 +61,13 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
     
 
     if optimizer_type == 'Adam':
-        optimizer = t.optim.Adam(model.parameters(), lr=args.learning_rate)
+        optimizer = Adam(model.parameters(), lr=args.learning_rate)
     elif optimizer_type == 'SGD':
-        optimizer = t.optim.SGD(model.parameters(), lr=args.learning_rate)
+        optimizer = SGD(model.parameters(), lr=args.learning_rate)
     elif optimizer_type == 'RMSProp':
-        optimizer = t.optim.RMSprop(model.parameters(), lr=args.learning_rate)
-    # elif optimizer_type == 'Adagrad':
-    #     optimizer = Sgd(model.parameters(), lr=args.learning_rate)
+        optimizer = RMSProp(model.parameters(), lr=args.learning_rate)
+    elif optimizer_type == 'Adagrad':
+         optimizer = AdaGrad(model.parameters(), lr=args.learning_rate)
     # elif optimizer_type == 'Momentum':
     #     optimizer = Sgd(model.parameters(), lr=args.learning_rate)
    
@@ -109,9 +109,9 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
     print(accuracy_list)
 
 
-# writer = SummaryWriter("n/a")
-# args = trainargs()
-# train(args, CNN(), optimizer_type="SGD")
-# writer.close()
+writer = SummaryWriter("n/a")
+args = trainargs()
+train(args, CNN(), optimizer_type="Adagrad")
+writer.close()
 
 
