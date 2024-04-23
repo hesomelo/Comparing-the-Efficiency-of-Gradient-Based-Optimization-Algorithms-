@@ -14,20 +14,30 @@ import torch.nn as nn
 # this includes not only momentum but also other features such as dampening, 
 #weight decay, Nesterov's momentum, and support for maximization and these are the parameters we can set as default
 class SGD(torch.optim.Optimizer):
-    def __init__(self, params, lr, momentum=0, dampening=0, weight_decay=0, nesterov=False, maximize=False):
-        if lr < 0.0:
-            raise ValueError("Invalid learning rate: {}".format(lr))
-        if momentum < 0.0:
-            raise ValueError("Invalid momentum value: {}".format(momentum))
-        if weight_decay < 0.0:
-            raise ValueError("Invalid weight_decay value: {}".format(weight_decay))
-        if not 0 <= dampening <= 1:
-            raise ValueError("Invalid dampening value: {}".format(dampening))
-        
-        defaults = dict(lr=lr, momentum=momentum, dampening=dampening, weight_decay=weight_decay, nesterov=nesterov, maximize=maximize)
+    def __init__(self, params, lr=0.001, momentum=0, dampening=0):
+        params = list(params)
+        self.params = params
+        self.lr = lr
+        self.momentum = momentum
+        self.dampening = dampening
+        self.t = 0
+        self.b = [t.zeros_like(p) for p in self.params]
+        defaults = dict(params = params, lr=lr, momentum=momentum, dampening=dampening)
         super(SGD, self).__init__(params, defaults)
-
-        @t.inference_mode()
+        
+    @t.inference_mode()
+    def step(self):
+        self.t += 1
+        for i,p in enumerate(self.params):
+            grad = p.grad
+            if self.momentum != 0:
+                if self.t > 1:
+                    self.b[i] = self.momentum*self.b[i] + (1-self.dampening)*grad
+                else:
+                    self.b[i] = grad
+                grad = self.b[i]
+            self.params[i] -= self.lr*grad
+        """   
         def step(self, closure=None):
             loss = None
             if closure is not None:
@@ -59,10 +69,10 @@ class SGD(torch.optim.Optimizer):
                         p.data.add_(d_p, alpha=-group['lr'])
             
             return loss     
+        """
 
 
-
-
+"""
 class SgdMomentum(torch.optim.Optimizer):
     def __init__(self, params, lr, momentum=0.9):
         if lr < 0.0:
@@ -99,7 +109,7 @@ class SgdMomentum(torch.optim.Optimizer):
                 p.data.add_(buf, alpha=-group['lr'])
 
         return loss
-
+"""
 
 class Adam(torch.optim.Optimizer):
     def __init__(self, params, lr=0.001, b1=0.9, b2=0.999, ep=10e-8):

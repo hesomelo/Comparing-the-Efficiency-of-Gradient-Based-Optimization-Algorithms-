@@ -63,7 +63,7 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
     if optimizer_type == 'Adam':
         optimizer = Adam(model.parameters())
     elif optimizer_type == 'SGD':
-        optimizer = SGD(model.parameters(), lr=args.learning_rate)
+        optimizer = t.optim.SGD(params=model.parameters(), lr = 0.001, momentum = 0.9)
     elif optimizer_type == 'RMSProp':
         optimizer = RMSProp(model.parameters(), lr=args.learning_rate)
     elif optimizer_type == 'Adagrad':
@@ -111,7 +111,7 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
 
 writer = SummaryWriter("n/a")
 args = trainargs()
-train(args, CNN(), optimizer_type="Adam")
+train(args, CNN(), optimizer_type="SGD")
 writer.close()
 
 
