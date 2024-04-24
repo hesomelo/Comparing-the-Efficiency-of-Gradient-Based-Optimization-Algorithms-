@@ -11,20 +11,23 @@ from torch.utils.tensorboard import SummaryWriter
 
 
 
-inp = 28**2
-hid = 10
-out = 10
+
+
+
 device = t.device("cuda" if t.cuda.is_available() else "cpu")
 
-MLP = nn.Sequential(
-    nn.Flatten(),
-    nn.Linear(inp,hid),
-    nn.ReLU(),
-    nn.Linear(hid,hid),
-    nn.ReLU(),
-    nn.Linear(hid,out),
 
-)
+class MLP(nn.Module):
+    def __init__(self, input, hidden, output):
+        super(MLP, self).__init__()
+        self.input = nn.Linear(input, hidden)
+        self.layer1 = nn.Linear(hidden, hidden)
+        self.layer2 = nn.Linear(hidden,hidden)
+        self.layer3 = nn.Linear(hidden, hidden)
+        self.layer4 = nn.Linear(hidden, output)
+    def forward(self,x):
+        x = x.view(x.size(0), -1) 
+        return self.layer4(F.relu(self.layer3(F.relu(self.layer2(F.relu(self.layer1(F.relu(self.input(x)))))))))
 
 
 class CNN(nn.Module):
@@ -68,8 +71,8 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
         optimizer = RMSProp(model.parameters(), lr=args.learning_rate)
     elif optimizer_type == 'Adagrad':
          optimizer = AdaGrad(model.parameters(), lr=args.learning_rate)
-    # elif optimizer_type == 'Momentum':
-    #     optimizer = Sgd(model.parameters(), lr=args.learning_rate)
+    elif optimizer_type == 'SGDM':
+        optimizer = SGD(model.parameters(), lr=args.learning_rate)
    
     accuracy_list = []
     loss = nn.CrossEntropyLoss()
@@ -109,9 +112,9 @@ def train(args, model, optimizer_type="Adam", dataset="mnist"):
     print(accuracy_list)
 
 
-writer = SummaryWriter("n/a")
-args = trainargs()
-train(args, CNN(), optimizer_type="SGD")
-writer.close()
+# writer = SummaryWriter("n/a")
+# args = trainargs()
+# train(args, CNN(), optimizer_type="SGD")
+# writer.close()
 
 
