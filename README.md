@@ -1,7 +1,7 @@
-CPSC 440 Project 2024
 
-riu
-oscar 
+
+Oscar Lu
+Riu Sugimoto
 
 Comparing the Efficiency of Gradient-Based Optimization Algorithms!
 
